@@ -1,0 +1,22 @@
+{
+    "name": "ejen/yii2-onpay",
+    "description": "Yii2 onpay extension",
+    "keywords": ["yii2", "onpay"],
+    "homepage": "https://github.com/ejen/yii2-onpay",
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Dmitry V. Alexeev",
+            "email": "mail@alexeevdv.ru",
+            "homepage": "https://alexeevdv.ru"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "ejen\\payment\\": "src"
+        }
+    }
+}
