@@ -70,17 +70,6 @@ class Payment extends \yii\base\Model
 //            [['url_success', 'url_fail'], 'string', 'max' => 255],
             [['convert'], 'boolean'],
             ['price', 'number'],
-            ['price', 'filter', 'filter' => function($value) {
-                $value = round(floatval($value), 2);
-                $value = sprintf('%01.2f', $value);
-        
-                if (substr($value, -1) == '0')
-                {
-                    $value = sprintf('%01.1f', $value);
-                }
-                return $value;
-            }],
-
         ];
     }
 
@@ -90,14 +79,21 @@ class Payment extends \yii\base\Model
 
         $convert = $this->convert ? 'yes' : 'no';
 
-        $md5 = strtoupper(md5("{$this->pay_mode};{$this->price};{$this->ticker};{$this->pay_for};{$convert};{$this->secret_key}"));
+        $price = round(floatval($this->price), 2);
+        $price = sprintf('%01.2f', $price);
+        if (substr($price, -1) == '0')
+        {
+            $price = sprintf('%01.1f', $price);
+        ]
+
+        $md5 = strtoupper(md5("{$this->pay_mode};{$price};{$this->ticker};{$this->pay_for};{$convert};{$this->secret_key}"));
         
         $url = urlencode(is_array($this->url_success) ? Url::to($this->url_success, true) : $this->url_success);
         
         $params = [
             'pay_mode' => $this->pay_mode,
             'pay_for' => $this->pay_for,
-            'price' => $this->price,
+            'price' => $price,
             'ticker' => $this->ticker,
             'convert' => $convert,
             'md5' => $md5,
