@@ -1,0 +1,48 @@
+<?php
+
+namespace ejen\payment\onpay;
+
+use Yii;
+use yii\web\NotFoundHttpException;
+use yii\web\XmlResponseFormatter;
+
+class ApiAction extends \yii\base\Action
+{
+    public $componentId = 'onpay';
+    public $checkCallback;
+    public $payCallback;
+
+    public function run()
+    {
+        Yii::$app->response->format = 'custom';
+        Yii::$app->response->formatters['custom'] = new XmlResponseFormatter([
+            'rootTag' => 'result',
+        ]);
+
+        $data = Yii::$app->request->get();
+        $data['secret_key'] = Yii::$app->{$this->componentId}->secret_key;
+        switch($data['type'])
+        {
+            case 'check':
+                $request = new ApiCheckRequest($data);
+                $response = new MerchantCheckResponse;
+                $response->attributes = $data;
+                $callback = $this->checkCallback;
+                break;
+            case 'pay':
+                $request = new ApiPayRequest($data);
+                $response = new MerchantPayResponse;
+                $response->attributes = $data;
+                $callback = $this->payCallback;
+                break;
+            default:
+                throw new NotFoundHttpException;
+        }
+        
+        $result = call_user_func_array($callback, [&$request, &$response]);
+
+        if ($result) $response->code = 0;
+
+        return $response->asArray();
+    }
+}

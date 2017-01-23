@@ -15,6 +15,9 @@ class Onpay extends \yii\base\Component
     public $url_success;
     public $url_fail;
 
+    public $checkCallback;
+    public $payCallback;
+
     public function createPayment($params = [])
     {
         $params = ArrayHelper::merge($params, [
