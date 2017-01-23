@@ -67,7 +67,7 @@ class Payment extends \yii\base\Model
             [['pay_mode'], 'in', 'range' => ['fix', 'free']],
             [['ticker'], 'in', 'range' => ['RUR', 'USD', 'TST']],
             [['pay_for'], 'string', 'max' => '100'],
-            [['url_success', 'url_fail'], 'string', 'max' => 255],
+//            [['url_success', 'url_fail'], 'string', 'max' => 255],
             [['convert'], 'boolean'],
             ['price', 'number'],
             ['price', 'filter', 'filter' => function($value) {
@@ -92,6 +92,8 @@ class Payment extends \yii\base\Model
 
         $md5 = strtoupper(md5("{$this->pay_mode};{$this->price};{$this->ticker};{$this->pay_for};{$convert};{$this->secret_key}"));
         
+        $url = urlencode(is_array($this->url_success) ? Url::to($this->url_success, true) : $this->url_success);
+        
         $params = [
             'pay_mode' => $this->pay_mode,
             'pay_for' => $this->pay_for,
@@ -102,8 +104,8 @@ class Payment extends \yii\base\Model
             'user_email' => urlencode($this->user_email),
             'f' => $this->f,
             'ln' => $this->ln,
-            'url_success_enc' => urlencode(is_array($this->url_success) ? Url::to($this->url_success) : $this->url_success),
-            'url_fail_enc' => urlencode(is_array($this->url_fail) ? Url::to($this->url_fail) : $this->url_fail),
+            'url_success_enc' => urlencode(is_array($this->url_success) ? Url::to($this->url_success, true) : $this->url_success),
+            'url_fail_enc' => urlencode(is_array($this->url_fail) ? Url::to($this->url_fail, true) : $this->url_fail),
         ];
 
         return $this->baseUrl.'/pay/'.$this->username.'?'.http_build_query($params);
