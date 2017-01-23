@@ -97,11 +97,13 @@ class Payment extends \yii\base\Model
             'ticker' => $this->ticker,
             'convert' => $convert,
             'md5' => $md5,
+            'user_phone' => urlencode($this->user_phone),
             'user_email' => urlencode($this->user_email),
             'f' => $this->f,
             'ln' => $this->ln,
             'url_success_enc' => urlencode(is_array($this->url_success) ? Url::to($this->url_success, true) : $this->url_success),
             'url_fail_enc' => urlencode(is_array($this->url_fail) ? Url::to($this->url_fail, true) : $this->url_fail),
+            'price_final' => $this->price_final,
         ];
 
         return $this->baseUrl.'/pay/'.$this->username.'?'.http_build_query($params);
