@@ -12,16 +12,16 @@ class Onpay extends \yii\base\Component
 
     public $username;
 
-    public $success_url;
-    public $fail_url;
+    public $url_success;
+    public $url_fail;
 
     public function createPayment($params = [])
     {
         $params = ArrayHelper::merge($params, [
             'secret_key' => $this->secret_key,
             'username' => $this->username,
-            'success_url' => $this->success_url,
-            'fail_url' => $this->fail_url,
+            'url_success' => $this->url_success,
+            'url_fail' => $this->url_fail,
         ]);
 
         return new Payment($params);
