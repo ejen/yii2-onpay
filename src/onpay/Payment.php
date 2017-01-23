@@ -84,7 +84,7 @@ class Payment extends \yii\base\Model
         if (substr($price, -1) == '0')
         {
             $price = sprintf('%01.1f', $price);
-        ]
+        }
 
         $md5 = strtoupper(md5("{$this->pay_mode};{$price};{$this->ticker};{$this->pay_for};{$convert};{$this->secret_key}"));
         
