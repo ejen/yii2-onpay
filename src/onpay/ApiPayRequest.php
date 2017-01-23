@@ -50,13 +50,13 @@ class ApiPayRequest extends \yii\base\Model
         ];
     }
 
-    public function validateMd5($model, $attribute)
+    public function validateMd5($attribute)
     {
-        $checkString = "pay;{$model->pay_for};{$model->onpay_id};{$model->order_ammount};{$model->order_currency};{$model->secret_key}";
+        $checkString = "pay;{$this->pay_for};{$this->onpay_id};{$this->order_amount};{$this->order_currency};{$this->secret_key}";
         
-        if ($model->{$attribute} != strtoupper(md5($checkString)))
+        if ($this->{$attribute} != strtoupper(md5($checkString)))
         {
-            return $model->addError($attribute, 'md5 checksum is incorrect');
+            return $this->addError($attribute, 'md5 checksum is incorrect');
         }
     }
 }

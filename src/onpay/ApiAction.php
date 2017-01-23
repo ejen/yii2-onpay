@@ -38,6 +38,19 @@ class ApiAction extends \yii\base\Action
             default:
                 throw new NotFoundHttpException;
         }
+
+        if (!$request->validate())
+        {
+            if ($request->hasErrors('md5'))
+            {
+                $response->code = 7;
+            }
+            else
+            {
+                $response->code = 3;
+            }
+            return $response->asArray();
+        }
         
         $result = call_user_func_array($callback, [&$request, &$response]);
 

@@ -24,16 +24,17 @@ class ApiCheckRequest extends \yii\base\Model
             [['secret_key'], 'safe'],
             [['type', 'amount', 'order_amount', 'order_currency', 'pay_for', 'md5'], 'required'],
             [['type'], 'compare', 'compareValue' => 'check'],
+            [['md5'], 'validateMd5'],
         ];
     }
 
-    public function validateMd5($model, $attribute)
+    public function validateMd5($attribute)
     {
-        $checkString = "check;{$model->pay_for};{$model->order_ammount};{$model->order_currency};{$model->secret_key}";
+        $checkString = "check;{$this->pay_for};{$this->order_amount};{$this->order_currency};{$this->secret_key}";
         
-        if ($model->{$attribute} != strtoupper(md5($checkString)))
+        if ($this->{$attribute} != strtoupper(md5($checkString)))
         {
-            return $model->addError($attribute, 'md5 checksum is incorrect');
+            return $this->addError($attribute, 'md5 checksum is incorrect');
         }
     }
 }
