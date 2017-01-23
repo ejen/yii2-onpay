@@ -44,8 +44,9 @@ class ApiPayRequest extends \yii\base\Model
     {
         return [
             [['secret_key'], 'safe'],
-            [['type', 'onpay_id', 'amount', 'balance_amount', 'balance_currency', 'order_amount', 'order_currency', 'exchange_rate', 'pay_for', 'paymentDateTime', 'note', 'user_email', 'user_phone', 'protection_code', 'day_to_expiry', 'paid_amount', 'md5'], 'required'],
+            [['type', 'onpay_id', 'amount', 'balance_amount', 'balance_currency', 'order_amount', 'order_currency', 'exchange_rate', 'pay_for', 'paymentDateTime', 'paid_amount', 'md5'], 'required'],
             [['type'], 'compare', 'compareValue' => 'pay'],
+            [['note', 'user_email', 'user_phone', 'protection_code', 'day_to_expiry'], 'default'],
             [['md5'], 'validateMd5'],
         ];
     }
