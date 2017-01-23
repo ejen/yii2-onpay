@@ -44,6 +44,7 @@ class ApiAction extends \yii\base\Action
             if ($request->hasErrors('md5'))
             {
                 $response->code = 7;
+                $response->comment = 'bad_pay';
             }
             else
             {
