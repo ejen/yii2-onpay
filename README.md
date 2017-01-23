@@ -107,3 +107,39 @@ class OnpayController extends \yii\web\Controller
 }
 ```
 
+## Payment example
+
+```php
+<?php
+
+namespace frontend\controllers;
+
+use Yii;
+
+use frontend\forms\PaymentForm;
+
+class PaymentController extends \yii\web\Controller
+{
+
+    public function actionIndex()
+    {
+        $model = new PaymentForm;
+        if ($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            $payment = Yii::$app->onpay->createPayment([
+                'price' => $model->amount,
+                'pay_for' => Yii::$app->user->id,
+            ]);
+
+            if ($payment->validate())
+            {
+                return $this->redirect($payment->getUrl());
+            }
+        }        
+
+        return $this->render('index', [
+            'model' => $model,
+        ]);
+    }
+}
+```
