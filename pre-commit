@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Running Code Sniffer..."
+
+vendor/bin/phpcs --extensions=php --standard=vendor/yiisoft/yii2-coding-standards/Yii2 src
+
+if [ $? != 0 ]
+then
+echo "Fix the error before commit."
+exit 1
+fi
+
+exit $?

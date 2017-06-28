@@ -2,10 +2,13 @@
 
 namespace ejen\payment;
 
+use ejen\payment\onpay\Payment;
 use yii\helpers\ArrayHelper;
 
-use ejen\payment\onpay\Payment;
-
+/**
+ * Class Onpay
+ * @package ejen\payment
+ */
 class Onpay extends \yii\base\Component
 {
     public $secret_key;
@@ -20,6 +23,10 @@ class Onpay extends \yii\base\Component
 
     public $ticker = 'RUR';
 
+    /**
+     * @param array $params
+     * @return Payment
+     */
     public function createPayment($params = [])
     {
         $params = ArrayHelper::merge($params, [

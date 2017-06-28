@@ -2,6 +2,10 @@
 
 namespace ejen\payment\onpay;
 
+/**
+ * Class MerchantPayResponse
+ * @package ejen\payment\onpay
+ */
 class MerchantPayResponse extends \yii\base\Model
 {
     public $secret_key;
@@ -20,6 +24,9 @@ class MerchantPayResponse extends \yii\base\Model
 
     public $comment;
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -29,11 +36,17 @@ class MerchantPayResponse extends \yii\base\Model
         ];
     }
 
+    /**
+     * @return string
+     */
     public function getMd5()
     {
         return strtoupper(md5("pay;{$this->pay_for};{$this->onpay_id};{$this->order_id};{$this->order_amount};{$this->order_currency};{$this->code};{$this->secret_key}"));
     }
 
+    /**
+     * @return array
+     */
     public function asArray()
     {
         return [

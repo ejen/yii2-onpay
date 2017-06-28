@@ -2,6 +2,10 @@
 
 namespace ejen\payment\onpay;
 
+/**
+ * Class ApiPayRequest
+ * @package ejen\payment\onpay
+ */
 class ApiPayRequest extends \yii\base\Model
 {
     public $secret_key;
@@ -40,6 +44,9 @@ class ApiPayRequest extends \yii\base\Model
 
     public $md5;
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -51,12 +58,15 @@ class ApiPayRequest extends \yii\base\Model
         ];
     }
 
+    /**
+     * @param $attribute
+     * @return mixed
+     */
     public function validateMd5($attribute)
     {
         $checkString = "pay;{$this->pay_for};{$this->onpay_id};{$this->order_amount};{$this->order_currency};{$this->secret_key}";
-        
-        if ($this->{$attribute} != strtoupper(md5($checkString)))
-        {
+
+        if ($this->{$attribute} != strtoupper(md5($checkString))) {
             return $this->addError($attribute, 'md5 checksum is incorrect');
         }
     }

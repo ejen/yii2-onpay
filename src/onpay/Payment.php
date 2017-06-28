@@ -4,6 +4,10 @@ namespace ejen\payment\onpay;
 
 use yii\helpers\Url;
 
+/**
+ * Class Payment
+ * @package ejen\payment\onpay
+ */
 class Payment extends \yii\base\Model
 {
     public $baseUrl = 'http://secure.onpay.ru';
@@ -38,7 +42,8 @@ class Payment extends \yii\base\Model
     public $pay_for;
 
     /**
-     * Принудительная конвертация в валюту ценника. Если включена - все поступающие платежи будут конвертироваться в валюту ценника.
+     * Принудительная конвертация в валюту ценника.
+     * Если включена - все поступающие платежи будут конвертироваться в валюту ценника.
      */
     public $convert = true;
 
@@ -60,6 +65,9 @@ class Payment extends \yii\base\Model
     public $one_way;
     public $price_final = true;
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -73,16 +81,21 @@ class Payment extends \yii\base\Model
         ];
     }
 
+    /**
+     * @return bool|string
+     * Возвращает url страницы оплаты c соответсвующими параметрами или false в случае, если не прошла валидацию
+     */
     public function getUrl()
     {
-        if (!$this->validate()) return false;
+        if (!$this->validate()) {
+            return false;
+        }
 
         $convert = $this->convert ? 'yes' : 'no';
 
         $price = round(floatval($this->price), 2);
         $price = sprintf('%01.2f', $price);
-        if (substr($price, -1) == '0')
-        {
+        if (substr($price, -1) == '0') {
             $price = sprintf('%01.1f', $price);
         }
 
@@ -106,6 +119,6 @@ class Payment extends \yii\base\Model
             'price_final' => $this->price_final ? 'true' : 'false',
         ];
 
-        return $this->baseUrl.'/pay/'.$this->username.'?'.http_build_query($params);
+        return $this->baseUrl . '/pay/' . $this->username . '?' . http_build_query($params);
     }
 }
