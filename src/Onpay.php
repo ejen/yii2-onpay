@@ -18,6 +18,8 @@ class Onpay extends \yii\base\Component
     public $checkCallback;
     public $payCallback;
 
+    public $ticker = 'RUR';
+
     public function createPayment($params = [])
     {
         $params = ArrayHelper::merge($params, [

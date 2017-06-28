@@ -28,9 +28,9 @@ class Payment extends \yii\base\Model
 
     /**
      * Основная валюта ценника.
-     * Трехсимвольное наименование валюты
+     * Трехсимвольное наименование валюты (или платежной системы http://wiki.onpay.ru/doku.php?id=api-currency)
      */
-    public $ticker = 'RUR';
+    public $ticker;
 
     /**
      * Номер заказа, заявки, аккаунт пользователя и т.п. для идентификации платежа в системе магазина.
@@ -87,9 +87,9 @@ class Payment extends \yii\base\Model
         }
 
         $md5 = strtoupper(md5("{$this->pay_mode};{$price};{$this->ticker};{$this->pay_for};{$convert};{$this->secret_key}"));
-        
+
         $url = urlencode(is_array($this->url_success) ? Url::to($this->url_success, true) : $this->url_success);
-        
+
         $params = [
             'pay_mode' => $this->pay_mode,
             'pay_for' => $this->pay_for,
