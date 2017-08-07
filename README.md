@@ -5,7 +5,7 @@
 Yii2-onpay can be installed using composer. Run following command to download and install Yii2-onpay:
 
 ```bash
-composer require ejen/yii2-onpay 1.0.0 
+composer require ejen/yii2-onpay ~1.0 
 ```
 
 ## Configure

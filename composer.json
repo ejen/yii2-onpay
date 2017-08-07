@@ -13,6 +13,10 @@
         }
     ],
     "require": {
+        "yiisoft/yii2": "^2.0"
+    },
+    "require-dev": {
+        "yiisoft/yii2-coding-standards": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -25,7 +29,10 @@
             "chmod +x .git/hooks/pre-commit"
         ]
     },
-    "require-dev": {
-        "yiisoft/yii2-coding-standards": "^2.0"
-    }
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }

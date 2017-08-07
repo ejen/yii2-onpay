@@ -2,18 +2,29 @@
 
 namespace ejen\payment\onpay;
 
+use yii\base\InvalidConfigException;
+use yii\base\Model;
 use yii\helpers\Url;
 
 /**
  * Class Payment
  * @package ejen\payment\onpay
  */
-class Payment extends \yii\base\Model
+class Payment extends Model
 {
+    /**
+     * @var string
+     */
     public $baseUrl = 'http://secure.onpay.ru';
 
+    /**
+     * @var string
+     */
     public $secret_key;
 
+    /**
+     * @var string
+     */
     public $username;
 
     /**
@@ -68,16 +79,35 @@ class Payment extends \yii\base\Model
     /**
      * @inheritdoc
      */
+    public function init()
+    {
+        if (!$this->username) {
+            throw new InvalidConfigException('`username` is required.');
+        }
+        if (!$this->secret_key) {
+            throw new InvalidConfigException('`secret_key` is required.');
+        }
+        if (is_array($this->url_success)) {
+            $this->url_success = Url::to($this->url_success, true);
+        }
+        if (is_array($this->url_fail)) {
+            $this->url_fail = Url::to($this->url_fail, true);
+        }
+        parent::init();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
             [['username', 'pay_mode', 'price', 'ticker', 'pay_for', 'convert', 'url_success', 'url_fail'], 'required'],
             [['pay_mode'], 'in', 'range' => ['fix', 'free']],
-            [['ticker'], 'in', 'range' => ['RUR', 'USD', 'TST']],
             [['pay_for'], 'string', 'max' => '100'],
-//            [['url_success', 'url_fail'], 'string', 'max' => 255],
             [['convert'], 'boolean'],
-            ['price', 'number'],
+            [['price'], 'number'],
+            [['one_way'], 'default'],
         ];
     }
 
@@ -101,23 +131,26 @@ class Payment extends \yii\base\Model
 
         $md5 = strtoupper(md5("{$this->pay_mode};{$price};{$this->ticker};{$this->pay_for};{$convert};{$this->secret_key}"));
 
-        $url = urlencode(is_array($this->url_success) ? Url::to($this->url_success, true) : $this->url_success);
-
         $params = [
             'pay_mode' => $this->pay_mode,
             'pay_for' => $this->pay_for,
             'price' => $price,
-            'ticker' => $this->ticker,
+            'ticker' => $this->ticker ? $this->ticker : 'RUR',
             'convert' => $convert,
             'md5' => $md5,
-            'user_phone' => urlencode($this->user_phone),
-            'user_email' => urlencode($this->user_email),
+            //'user_phone' => urlencode($this->user_phone),
+            //'user_email' => urlencode($this->user_email),
             'f' => $this->f,
             'ln' => $this->ln,
-            'url_success_enc' => urlencode(is_array($this->url_success) ? Url::to($this->url_success, true) : $this->url_success),
-            'url_fail_enc' => urlencode(is_array($this->url_fail) ? Url::to($this->url_fail, true) : $this->url_fail),
+            'url_success_enc' => $this->url_success,
+            'url_fail_enc' => $this->url_fail,
             'price_final' => $this->price_final ? 'true' : 'false',
         ];
+
+        if ($this->one_way) {
+            $params['one_way'] = $this->one_way;
+            $params['ticker'] = 'RUR';
+        }
 
         return $this->baseUrl . '/pay/' . $this->username . '?' . http_build_query($params);
     }
